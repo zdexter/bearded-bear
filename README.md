@@ -1,7 +1,9 @@
 bearded-bear
 ============
 
-A parser combinator library for parsing ambiguous left-recursive grammars in polynomial time and space.
+A parser combinator generator library for parsing ambiguous left-recursive grammars in polynomial time and space.
+
+When finished, this library will read a grammar in some standardized form and output a combinatorial parser. I like combinatorial parsers because they are easy to understand and maintain. They aren't always the best choice, but this library helps make them a good choice for a wider variety of use cases.
 
 Built to learn more about Python's set types, memoization, and combinatorial parsing.
 

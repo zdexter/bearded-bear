@@ -1,0 +1,9 @@
+s ::= np vp | s pp
+pp ::= prep np
+det ::= "a | "the"
+verb ::= "saw"
+
+np ::= noun | det noun | np np
+vp ::= verb np
+noun ::= "i" | "man" | "park" | "bat"
+prep ::= "in" | "with"

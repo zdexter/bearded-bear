@@ -64,6 +64,20 @@ def comp(j, p, q): # Composite, or sequence, recognizer
         return out
     return _
 
+memo_table = {} # Position: (Parser function name, result set)
+
+def memoize(j):
+    def _(parser, *args)
+        """Return result set for parser(j) if it's memoized.
+           Else, memoize result set and return it.
+        """
+        stored_set = getattr(memo_table[j], False)
+        if stored_set[0] == parser.__name__:
+            return stored_set[1]
+        memo_table[j] = parser(j, args)
+        return memo_table[j]
+    return _
+
 def parse(token_list):
     """Perform syntactic analysis on input."""
     pass

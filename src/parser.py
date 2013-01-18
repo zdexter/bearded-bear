@@ -1,3 +1,8 @@
+"""
+All combinators return the index that the parser should
+ attempt to match next.
+"""
+
 def lex(s):
     """Return a list of tokens."""
     return s.split(" ");
@@ -64,18 +69,39 @@ def comp(j, p, q): # Composite, or sequence, recognizer
         return out
     return _
 
+"""
+Index i contains the set of inputs whose index+1 in the input list resulted in successful parses.
+(Memo label, start position -> Result set)
+"""
 memo_table = {} # Position: (Parser function name, result set)
 
-def memoize(j):
-    def _(parser, *args)
-        """Return result set for parser(j) if it's memoized.
+composite_str_recognizer = comp(0, rec_str, rec_str)
+
+def memoize(j, parser, *args):
+    """
+    >>> import pdb; pdb.set_trace; memoize(0, composite_str_recognizer)(["lol", 1, "copter"])
+    False
+    >>> memoize(0, composite_str_recognizer)(["lol", 1, "copter"])
+    "lol"
+    """
+    print 'here, parser was', parser
+    def _(token_list):
+        """Return result set for parser(j) if there has previously been a
+            successful parse ending at position j-1 by the passed-in parser.
            Else, memoize result set and return it.
         """
-        stored_set = getattr(memo_table[j], False)
-        if stored_set[0] == parser.__name__:
-            return stored_set[1]
-        memo_table[j] = parser(j, args)
-        return memo_table[j]
+        memoized_sets = memo_table[parser.__name__] if parser.__name__ in memo_table else False
+        # Determine whether or not the parser with name /parser/ 
+        #  successfully parsed and memoized input ending at j-1.
+        if memoized_sets:
+            stored_set = memoized_sets[j] if j in memoized_sets else False
+            if stored_set and stored_set == parser.__name__:
+                return stored_set
+        #print 'parser was', comp(j, rec_str, rec_str)(token_list)
+        out = parser(token_list)
+        memo_table[parser.__name__][j] = parser(token_list)
+        #return memo_table[j]
+        return memoized_sets
     return _
 
 def parse(token_list):
@@ -83,8 +109,10 @@ def parse(token_list):
     pass
 
 if __name__ == '__main__':
-    s = "1 5 0 3 92 91 109 8 3"
+    #s = "1 5 0 3 92 91 109 8 3"
     #parse(s)
     #print recognize()(3)
-    import doctest
-    doctest.testmod()
+    #import doctest
+    #doctest.testmod()
+    print 'comp rec was', composite_str_recognizer
+    memoize(0, composite_str_recognizer)(["lol", 1, "copter"])
